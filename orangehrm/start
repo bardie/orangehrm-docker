@@ -1,0 +1,16 @@
+#!/bin/sh
+
+DB_ROOT_PASS=${DB_ROOT_PASS:-"root"}
+DB_HRMS_USER=${DB_HRMS_USER:-"orangehrm"}
+DB_HRMS_PASSWORD=${DB_HRMS_PASSWORD:-"orangehrm"}
+
+service mysql start
+wait
+service apache2 start
+wait
+mysql -uroot \
+      -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED BY '${DB_ROOT_PASS}' WITH GRANT OPTION; FLUSH PRIVILEGES;"
+mysql -uroot \
+      -e "CREATE USER '${DB_HRMS_USER}'@'localhost' IDENTIFIED BY '${DB_HRMS_PASSWORD}';GRANT ALL PRIVILEGES ON *.* TO '${DB_HRMS_USER}'@'localhost' IDENTIFIED BY '${DB_HRMS_PASSWORD}' WITH GRANT OPTION; FLUSH PRIVILEGES;"
+wait
+tail -f /var/log/apache2/access.log

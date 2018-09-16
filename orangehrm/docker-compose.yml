@@ -1,0 +1,11 @@
+version: "2"
+
+services:
+  hrms:
+    build: ./
+    ports:
+      - "80:80"
+    environment:
+      - DB_ROOT_PASS="root"
+      - DB_HRMS_USER="orangehrm"
+      - DB_HRMS_PASSWORD="orangehrm"
